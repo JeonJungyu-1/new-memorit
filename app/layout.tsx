@@ -4,8 +4,9 @@ import { Inter } from 'next/font/google'
 export const metadata = {
   metadataBase: new URL('https://postgres-prisma.vercel.app'),
   title: 'Vercel Postgres Demo with Prisma',
+
   description:
-    'A simple Next.js app with Vercel Postgres as the database and Prisma as the ORM',
+    'A simple Next.js app with Vercel Postgres as the database and Prisma as the ORM'
 }
 
 const inter = Inter({
