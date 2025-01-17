@@ -1,3 +1,4 @@
+import Providers from "@/components/Providers";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -25,7 +26,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} min-h-full bg-background text-foreground antialiased`}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
