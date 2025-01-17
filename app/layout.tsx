@@ -1,3 +1,5 @@
+import BottomNavigation from "@/components/BottomNavigation";
+import Header from "@/components/layout/Header";
 import Providers from "@/components/Providers";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -24,9 +26,13 @@ export default function RootLayout({
   return (
     <html lang="ko" className="h-full">
       <body
-        className={`${inter.variable} min-h-full bg-background text-foreground antialiased`}
+        className={`${inter.variable} min-h-full bg-background text-foreground antialiased touch-manipulation select-none overflow-x-hidden`}
       >
-        <Providers>{children}</Providers>
+        <Header />
+        <main className="pb-16">
+          <Providers>{children}</Providers>
+        </main>
+        <BottomNavigation />
       </body>
     </html>
   );
