@@ -5,7 +5,7 @@
 @layer base {
   /* 기본 리셋 */
   * {
-    @apply border-border;
+    @apply border-neutral-200 box-border;
   }
 
   /* 루트 요소 기본 설정 */
@@ -62,11 +62,11 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-secondary;
+  @apply bg-gray-100 dark:bg-gray-800;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-muted-foreground/30 rounded-full;
+  @apply bg-gray-300 dark:bg-gray-600 rounded-full;
 }
 
 /* 기본 스타일 리셋 */
