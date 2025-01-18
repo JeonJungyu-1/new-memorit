@@ -1,8 +1,15 @@
+"use client";
+
+import AddFriendModal from "@/components/friends/AddFriendModal";
 import FriendList from "@/components/friends/FriendList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, Settings } from "lucide-react";
+import { Search, UserPlus } from "lucide-react";
+import { useState } from "react";
 
 export default function FriendsPage() {
+  // 모달 상태 관리를 위한 state
+  const [isAddFriendOpen, setIsAddFriendOpen] = useState(false);
+
   return (
     <main className="container max-w-xl mx-auto p-4">
       <div className="flex items-center justify-between mb-4">
@@ -11,8 +18,11 @@ export default function FriendsPage() {
           <button className="p-2 rounded-full hover:bg-gray-100">
             <Search className="w-5 h-5" />
           </button>
-          <button className="p-2 rounded-full hover:bg-gray-100">
-            <Settings className="w-5 h-5" />
+          <button
+            className="p-2 rounded-full hover:bg-gray-100"
+            onClick={() => setIsAddFriendOpen(true)}
+          >
+            <UserPlus className="w-5 h-5" />
           </button>
         </div>
       </div>
@@ -45,6 +55,11 @@ export default function FriendsPage() {
           <FriendList type="others" />
         </TabsContent>
       </Tabs>
+
+      <AddFriendModal
+        open={isAddFriendOpen}
+        onOpenChange={setIsAddFriendOpen}
+      />
     </main>
   );
 }

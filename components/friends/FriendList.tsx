@@ -1,9 +1,5 @@
-import { IFriend } from "@/types";
+import { IFriend, IFriendListProps } from "@/types";
 import FriendCard from "./FriendCard";
-
-interface IFriendListProps {
-  type: "all" | "mutual" | "sent" | "others";
-}
 
 export default function FriendList({ type }: IFriendListProps) {
   // 실제로는 API에서 데이터를 가져와야 합니다

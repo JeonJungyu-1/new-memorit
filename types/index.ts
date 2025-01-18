@@ -24,6 +24,25 @@ export interface IFriend {
   id: string;
   name: string;
   status: "online" | "offline";
-  lastActive?: Date;
   favoriteCount: number;
+  type: "all" | "mutual" | "sent" | "others";
+}
+
+export interface IFriendCategory {
+  value: string;
+  label: string;
+}
+
+export interface IAddFriendForm {
+  name: string;
+  category: string;
+}
+
+export interface IAddFriendModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export interface IFriendListProps {
+  type: IFriend["type"];
 }
