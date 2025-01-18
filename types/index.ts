@@ -24,8 +24,10 @@ export interface IFriend {
   id: string;
   name: string;
   status: "online" | "offline";
-  favoriteCount: number;
-  type: "all" | "mutual" | "sent" | "others";
+  type: "friend" | "pending" | "blocked";
+  category?: FriendCategory;
+  receivedCount?: number;
+  sentCount?: number;
 }
 
 export interface IFriendCategory {
@@ -45,4 +47,16 @@ export interface IAddFriendModalProps {
 
 export interface IFriendListProps {
   type: IFriend["type"];
+  category?: FriendCategory;
+}
+
+export type FriendCategory = "all" | "work" | "school" | "family";
+
+export interface IFriendDetail extends IFriend {
+  email: string;
+  phoneNumber?: string;
+  birthDate?: string;
+  address?: string;
+  memo?: string;
+  createdAt: string;
 }

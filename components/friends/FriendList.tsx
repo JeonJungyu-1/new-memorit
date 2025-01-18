@@ -1,28 +1,82 @@
-import { IFriend, IFriendListProps } from "@/types";
+import { FriendCategory, IFriend } from "@/types";
 import FriendCard from "./FriendCard";
 
-export default function FriendList({ type }: IFriendListProps) {
+interface IFriendListComponentProps {
+  type: IFriend["type"];
+  category?: FriendCategory;
+}
+
+export default function FriendList({
+  type,
+  category = "all",
+}: IFriendListComponentProps) {
   // 실제로는 API에서 데이터를 가져와야 합니다
   const mockFriends: IFriend[] = [
     {
       id: "1",
-      name: "Hee Melby",
+      name: "김영희",
       status: "online",
-      favoriteCount: 0,
+      type: "friend",
+      category: "work",
+      receivedCount: 2,
+      sentCount: 1,
     },
     {
       id: "2",
-      name: "Lumina S",
+      name: "이철수",
       status: "offline",
-      lastActive: new Date(),
-      favoriteCount: 0,
+      type: "friend",
+      category: "school",
+      receivedCount: 1,
+      sentCount: 3,
     },
-    // ... 더 많은 목업 데이터
+    {
+      id: "3",
+      name: "박민지",
+      status: "online",
+      type: "friend",
+      category: "family",
+      receivedCount: 5,
+      sentCount: 4,
+    },
+    {
+      id: "4",
+      name: "정대리",
+      status: "offline",
+      type: "friend",
+      category: "work",
+      receivedCount: 0,
+      sentCount: 1,
+    },
+    {
+      id: "5",
+      name: "최과장",
+      status: "online",
+      type: "friend",
+      category: "work",
+      receivedCount: 2,
+      sentCount: 2,
+    },
+    {
+      id: "6",
+      name: "한동창",
+      status: "offline",
+      type: "friend",
+      category: "school",
+      receivedCount: 1,
+      sentCount: 0,
+    },
   ];
 
+  // 카테고리에 따라 친구 목록 필터링
+  const filteredFriends =
+    category === "all"
+      ? mockFriends
+      : mockFriends.filter((friend) => friend.category === category);
+
   return (
-    <div className="space-y-2 mt-4">
-      {mockFriends.map((friend) => (
+    <div className="grid grid-cols-3 gap-4 mt-4">
+      {filteredFriends.map((friend) => (
         <FriendCard key={friend.id} friend={friend} />
       ))}
     </div>

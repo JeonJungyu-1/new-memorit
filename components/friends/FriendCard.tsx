@@ -1,36 +1,25 @@
 import { IFriend } from "@/types";
-import { Card } from "../ui/card";
+import Link from 'next/link'
 
 interface IFriendCardProps {
   friend: IFriend;
 }
 
-export default function FriendCard({ friend }: IFriendCardProps) {
+export function FriendCard({ friend }: IFriendCardProps) {
   return (
-    <Card className="p-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <div className="w-12 h-12 rounded-full bg-gray-200" />
-            <div
-              className={`absolute bottom-0 right-0 w-3 h-3 rounded-full ${
-                friend.status === "online" ? "bg-green-500" : "bg-gray-400"
-              }`}
-            />
+    <Link href={`/friends/${friend.id}`} className="block w-full">
+      <div className="p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+        <div className="flex flex-col items-center text-center">
+          <h3 className="font-medium mb-1">{friend.name}</h3>
+          {friend.category && (
+            <span className="text-sm text-gray-500 mb-2">{friend.category}</span>
+          )}
+          <div className="flex gap-3 text-sm text-gray-600">
+            <span>받은 기억 {friend.receivedCount || 0}</span>
+            <span>보낸 기억 {friend.sentCount || 0}</span>
           </div>
-          <div>
-            <h3 className="font-medium">{friend.name}</h3>
-            <p className="text-sm text-gray-500">
-              {friend.status === "online" ? "온라인" : "오프라인"}
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-500">
-            ♥ {friend.favoriteCount}
-          </span>
         </div>
       </div>
-    </Card>
+    </Link>
   );
 }

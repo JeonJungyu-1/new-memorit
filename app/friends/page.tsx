@@ -30,29 +30,29 @@ export default function FriendsPage() {
       <Tabs defaultValue="all" className="w-full">
         <TabsList className="w-full">
           <TabsTrigger value="all" className="flex-1">
-            광장
+            전체
           </TabsTrigger>
-          <TabsTrigger value="mutual" className="flex-1">
-            호감
+          <TabsTrigger value="work" className="flex-1">
+            직장
           </TabsTrigger>
-          <TabsTrigger value="sent" className="flex-1">
-            상점
+          <TabsTrigger value="school" className="flex-1">
+            학교
           </TabsTrigger>
-          <TabsTrigger value="others" className="flex-1">
-            패키
+          <TabsTrigger value="family" className="flex-1">
+            가족
           </TabsTrigger>
         </TabsList>
         <TabsContent value="all">
-          <FriendList type="all" />
+          <FriendList type="friend" category="all" />
         </TabsContent>
-        <TabsContent value="mutual">
-          <FriendList type="mutual" />
+        <TabsContent value="work">
+          <FriendList type="friend" category="work" />
         </TabsContent>
-        <TabsContent value="sent">
-          <FriendList type="sent" />
+        <TabsContent value="school">
+          <FriendList type="friend" category="school" />
         </TabsContent>
-        <TabsContent value="others">
-          <FriendList type="others" />
+        <TabsContent value="family">
+          <FriendList type="friend" category="family" />
         </TabsContent>
       </Tabs>
 
