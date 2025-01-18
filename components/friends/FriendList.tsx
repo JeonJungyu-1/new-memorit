@@ -20,6 +20,7 @@ export default function FriendList({
       category: "work",
       receivedCount: 2,
       sentCount: 1,
+      createdAt: new Date().toISOString(),
     },
     {
       id: "2",
@@ -29,6 +30,7 @@ export default function FriendList({
       category: "school",
       receivedCount: 1,
       sentCount: 3,
+      createdAt: new Date().toISOString(),
     },
     {
       id: "3",
@@ -38,6 +40,7 @@ export default function FriendList({
       category: "family",
       receivedCount: 5,
       sentCount: 4,
+      createdAt: new Date().toISOString(),
     },
     {
       id: "4",
@@ -47,6 +50,7 @@ export default function FriendList({
       category: "work",
       receivedCount: 0,
       sentCount: 1,
+      createdAt: new Date().toISOString(),
     },
     {
       id: "5",
@@ -56,6 +60,7 @@ export default function FriendList({
       category: "work",
       receivedCount: 2,
       sentCount: 2,
+      createdAt: new Date().toISOString(),
     },
     {
       id: "6",
@@ -65,6 +70,7 @@ export default function FriendList({
       category: "school",
       receivedCount: 1,
       sentCount: 0,
+      createdAt: new Date().toISOString(),
     },
   ];
 
