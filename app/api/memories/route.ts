@@ -1,16 +1,154 @@
+import { authOptions } from "@/lib/auth";
+import prisma from "@/lib/prisma";
+import { IMemoryCreate } from "@/types";
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
+/**
+ * 메모리 목록을 조회하는 GET 핸들러
+ */
+export async function GET() {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.email) {
+      return NextResponse.json(
+        { error: "인증되지 않은 사용자입니다." },
+        { status: 401 }
+      );
+    }
+
+    const memories = await prisma.memory.findMany({
+      where: {
+        OR: [
+          { authorId: session.user.id },
+          { sharedWith: { some: { id: session.user.id } } },
+          { isPublic: true },
+        ],
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+          },
+        },
+        tags: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        sharedWith: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return NextResponse.json(memories);
+  } catch (error) {
+    console.error("메모리 목록 조회 중 오류 발생:", error);
+    return NextResponse.json(
+      { error: "메모리 목록을 불러오는 중 오류가 발생했습니다." },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * 새로운 메모리를 생성하는 POST 핸들러
+ */
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const session = await getServerSession(authOptions);
 
-    // TODO: 데이터베이스에 저장하는 로직 구현
-    // 현재는 임시로 성공 응답만 반환
+    if (!session?.user?.email) {
+      return NextResponse.json(
+        { error: "인증되지 않은 사용자입니다." },
+        { status: 401 }
+      );
+    }
 
-    return NextResponse.json({ message: "기억이 성공적으로 추가되었습니다." });
+    const body: IMemoryCreate = await request.json();
+
+    // 필수 필드 검증
+    if (!body.title || !body.content) {
+      return NextResponse.json(
+        { error: "제목과 내용은 필수 입력 항목입니다." },
+        { status: 400 }
+      );
+    }
+
+    // 태그 처리: 존재하지 않는 태그는 새로 생성
+    const tags = body.tags
+      ? await Promise.all(
+          body.tags.map(async (tagName) => {
+            return await prisma.tag.upsert({
+              where: { name: tagName },
+              update: {},
+              create: { name: tagName },
+            });
+          })
+        )
+      : [];
+
+    const memory = await prisma.memory.create({
+      data: {
+        title: body.title,
+        content: body.content,
+        imageUrl: body.imageUrl,
+        isPublic: body.isPublic,
+        authorId: session.user.id,
+        tags: {
+          connect: tags.map((tag) => ({ id: tag.id })),
+        },
+        sharedWith: body.sharedWithUserIds
+          ? {
+              connect: body.sharedWithUserIds.map((id) => ({ id })),
+            }
+          : undefined,
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+          },
+        },
+        tags: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        sharedWith: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+          },
+        },
+      },
+    });
+
+    return NextResponse.json(memory);
   } catch (error) {
+    console.error("메모리 생성 중 오류 발생:", error);
     return NextResponse.json(
-      { error: "기억을 추가하는 중 오류가 발생했습니다." },
+      { error: "메모리를 추가하는 중 오류가 발생했습니다." },
       { status: 500 }
     );
   }

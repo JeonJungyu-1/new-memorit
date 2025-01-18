@@ -47,7 +47,6 @@ export interface IAddFriendModalProps {
 }
 
 export interface IFriendListProps {
-  type: IFriend["type"];
   category?: FriendCategory;
 }
 
@@ -60,4 +59,43 @@ export interface IFriendDetail extends IFriend {
   address?: string;
   memo?: string;
   createdAt: string;
+}
+
+export interface IMemoryCreate {
+  title: string;
+  content: string;
+  imageUrl?: string;
+  isPublic: boolean;
+  tags?: {
+    id?: string;
+    name: string;
+  }[];
+  sharedWithUserIds?: string[];
+}
+
+export interface IMemory {
+  id: string;
+  authorId: string;
+  title: string;
+  content: string;
+  imageUrl?: string;
+  isPublic: boolean;
+  createdAt: string;
+  updatedAt: string;
+  author: {
+    id: string;
+    name: string;
+    email: string;
+    image?: string;
+  };
+  tags: {
+    id: string;
+    name: string;
+  }[];
+  sharedWith: {
+    id: string;
+    name: string;
+    email: string;
+    image?: string;
+  }[];
 }
