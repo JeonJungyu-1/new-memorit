@@ -5,9 +5,10 @@ import { notFound } from "next/navigation";
 export default async function FriendDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const friend = await getFriendById(params.id);
+  const id = (await params).id;
+  const friend = await getFriendById(id);
 
   if (!friend) {
     notFound();
