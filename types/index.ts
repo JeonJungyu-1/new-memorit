@@ -23,11 +23,12 @@ export type IMemoryFormValues = z.infer<typeof memoryFormSchema>;
 export interface IFriend {
   id: string;
   name: string;
-  status: "online" | "offline";
-  type: "friend" | "pending" | "blocked";
-  category?: FriendCategory;
-  receivedCount?: number;
-  sentCount?: number;
+  email: string;
+  phoneNumber?: string;
+  birthDate?: string;
+  address?: string;
+  memo?: string;
+  createdAt: string;
 }
 
 export interface IFriendCategory {
