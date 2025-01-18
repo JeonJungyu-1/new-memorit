@@ -1,72 +1,58 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
-// 사용자 모델
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String
-  image     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // 관계 필드
-  memories        Memory[]    // 사용자가 작성한 기억들
-  friends         Friend[]    @relation("UserFriends") // 내 친구 목록
-  sharedMemories  Memory[]    @relation("SharedMemories") // 공유받은 기억들
+  id             String   @id @default(cuid())
+  email          String   @unique
+  name           String
+  image          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  friends        Friend[] @relation("UserFriends")
+  memories       Memory[]
+  sharedMemories Memory[] @relation("SharedMemories")
 }
 
-// 기억 모델
 model Memory {
-  id          String   @id @default(cuid())
-  title       String
-  content     String   @db.Text
-  imageUrl    String?
-  isPublic    Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  // 관계 필드
-  authorId    String
-  author      User     @relation(fields: [authorId], references: [id])
-  sharedWith  User[]   @relation("SharedMemories") // 이 기억을 공유받은 사용자들
-  tags        Tag[]    // 기억에 달린 태그들
+  id         String   @id @default(cuid())
+  title      String
+  content    String
+  imageUrl   String?
+  isPublic   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  authorId   String
+  author     User     @relation(fields: [authorId], references: [id])
+  tags       Tag[]    @relation("MemoryToTag")
+  sharedWith User[]   @relation("SharedMemories")
 
   @@index([authorId])
 }
 
-// 친구 관계 모델 (단방향)
 model Friend {
   id        String   @id @default(cuid())
-  friendId  String   // 친구로 등록된 사용자의 ID
-  memo      String?  // 친구에 대한 메모
+  friendId  String
+  memo      String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  // 관계 필드
-  userId    String   // 이 친구 관계를 소유한 사용자
+  userId    String
   user      User     @relation("UserFriends", fields: [userId], references: [id])
 
-  @@unique([userId, friendId]) // 동일한 친구를 중복 등록하지 않도록
+  @@unique([userId, friendId])
   @@index([userId])
 }
 
-// 태그 모델
 model Tag {
   id        String   @id @default(cuid())
   name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  // 관계 필드
-  memories  Memory[] // 이 태그가 사용된 기억들
+  memories  Memory[] @relation("MemoryToTag")
 }
