@@ -20,15 +20,24 @@ export const memoryFormSchema = z.object({
 
 export type IMemoryFormValues = z.infer<typeof memoryFormSchema>;
 
+export type FriendCategory = "all" | "family" | "school" | "work";
+export type FriendStatus = "online" | "offline";
+export type FriendType = "friend" | "pending" | "blocked";
+
 export interface IFriend {
   id: string;
   name: string;
-  email: string;
+  status: "online" | "offline";
+  type: "friend" | "blocked";
+  category?: FriendCategory;
+  receivedCount?: number;
+  sentCount?: number;
+  email?: string;
   phoneNumber?: string;
   birthDate?: string;
   address?: string;
   memo?: string;
-  createdAt: string;
+  createdAt: string | Date;
 }
 
 export interface IFriendCategory {
@@ -50,15 +59,23 @@ export interface IFriendListProps {
   category?: FriendCategory;
 }
 
-export type FriendCategory = "all" | "work" | "school" | "family";
+export interface IFriendDetail {
+  id: string;
+  friendId: string;
+  memo: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string;
+  user: IUser;
+}
 
-export interface IFriendDetail extends IFriend {
+export interface IUser {
+  name: string;
+  id: string;
   email: string;
-  phoneNumber?: string;
-  birthDate?: string;
-  address?: string;
-  memo?: string;
-  createdAt: string;
+  image: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface IMemoryCreate {
