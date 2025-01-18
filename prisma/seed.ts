@@ -1,46 +1,72 @@
-import prisma from '../lib/prisma'
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 async function main() {
-  const response = await Promise.all([
-    prisma.users.upsert({
-      where: { email: 'rauchg@vercel.com' },
-      update: {},
-      create: {
-        name: 'Guillermo Rauch',
-        email: 'rauchg@vercel.com',
-        image:
-          'https://images.ctfassets.net/e5382hct74si/2P1iOve0LZJRZWUzfXpi9r/9d4d27765764fb1ad7379d7cbe5f1043/ucxb4lHy_400x400.jpg',
+  // 기존 데이터 삭제
+  await prisma.tag.deleteMany();
+  await prisma.memory.deleteMany();
+  await prisma.friend.deleteMany();
+  await prisma.user.deleteMany();
+
+  // 테스트 사용자 생성
+  const user1 = await prisma.user.create({
+    data: {
+      email: "user1@example.com",
+      name: "김철수",
+      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=user1",
+    },
+  });
+
+  const user2 = await prisma.user.create({
+    data: {
+      email: "user2@example.com",
+      name: "이영희",
+      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=user2",
+    },
+  });
+
+  // 친구 관계 생성 (단방향)
+  await prisma.friend.create({
+    data: {
+      userId: user1.id,
+      friendId: user2.id,
+      memo: "고등학교 동창",
+    },
+  });
+
+  // 태그 생성
+  const tag1 = await prisma.tag.create({
+    data: { name: "여행" },
+  });
+
+  const tag2 = await prisma.tag.create({
+    data: { name: "일상" },
+  });
+
+  // 기억 생성
+  await prisma.memory.create({
+    data: {
+      title: "제주도 여행",
+      content: "친구들과 함께한 제주도 여행. 정말 즐거웠다!",
+      imageUrl: "https://example.com/jeju.jpg",
+      isPublic: true,
+      authorId: user1.id,
+      tags: {
+        connect: [{ id: tag1.id }],
       },
-    }),
-    prisma.users.upsert({
-      where: { email: 'lee@vercel.com' },
-      update: {},
-      create: {
-        name: 'Lee Robinson',
-        email: 'lee@vercel.com',
-        image:
-          'https://images.ctfassets.net/e5382hct74si/4BtM41PDNrx4z1ml643tdc/7aa88bdde8b5b7809174ea5b764c80fa/adWRdqQ6_400x400.jpg',
+      sharedWith: {
+        connect: [{ id: user2.id }],
       },
-    }),
-    await prisma.users.upsert({
-      where: { email: 'stey@vercel.com' },
-      update: {},
-      create: {
-        name: 'Steven Tey',
-        email: 'stey@vercel.com',
-        image:
-          'https://images.ctfassets.net/e5382hct74si/4QEuVLNyZUg5X6X4cW4pVH/eb7cd219e21b29ae976277871cd5ca4b/profile.jpg',
-      },
-    }),
-  ])
-  console.log(response)
+    },
+  });
 }
+
 main()
-  .then(async () => {
-    await prisma.$disconnect()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
   })
-  .catch(async (e) => {
-    console.error(e)
-    await prisma.$disconnect()
-    process.exit(1)
-  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
