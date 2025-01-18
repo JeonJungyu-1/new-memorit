@@ -16,9 +16,9 @@ export default function BottomNavigation() {
     },
     {
       name: "기억추가",
-      href: "/memory/create",
+      href: "/memory/add",
       icon: Plus,
-      current: pathname === "/memory/create",
+      current: pathname === "/memory/add",
     },
     {
       name: "친구",
