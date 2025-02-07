@@ -1,3 +1,4 @@
+import AuthWrapper from "@/components/AuthWrapper";
 import BottomNavigation from "@/components/BottomNavigation";
 import Header from "@/components/layout/Header";
 import Providers from "@/components/Providers";
@@ -30,7 +31,9 @@ export default function RootLayout({
       >
         <Header />
         <main className="pb-16">
-          <Providers>{children}</Providers>
+          <Providers>
+            <AuthWrapper>{children}</AuthWrapper>
+          </Providers>
         </main>
         <BottomNavigation />
       </body>
