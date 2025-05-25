@@ -1,12 +1,11 @@
-import { authOptions } from "@/lib/auth";
+import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { IUser } from "@/types";
-import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await auth();
 
     if (session) {
       // 이미 로그인된 경우
